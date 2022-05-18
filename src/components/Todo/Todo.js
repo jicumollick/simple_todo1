@@ -5,7 +5,24 @@ const Todo = () => {
     e.preventDefault();
     const taskName = e.target.name.value;
     const taskDescription = e.target.description.value;
-    console.log(taskName, taskDescription);
+    // console.log(taskName, taskDescription);
+
+    if (taskName && taskDescription) {
+      fetch("http://localhost:5000/task", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({ taskName, taskDescription }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          //   setIsReload(!isReload);
+        });
+    } else {
+      return;
+    }
   };
   return (
     <div className=" p-3 color-4D4C7D">
