@@ -7,7 +7,21 @@ const Dashboard = () => {
     fetch("http://localhost:5000/tasks")
       .then((res) => res.json())
       .then((data) => setTasks(data));
-  }, []);
+  }, [tasks]);
+
+  const handleDelete = (task) => {
+    const id = task._id;
+
+    fetch(`http://localhost:5000/task/${id}`, {
+      method: "DELETE",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ id }),
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data));
+  };
 
   return (
     <div>
@@ -29,7 +43,12 @@ const Dashboard = () => {
               <td>{task.taskDescription}</td>
               <td>
                 <button className="btn btn-success">Complete</button>
-                <button className="btn btn-danger ms-2">Delete</button>
+                <button
+                  className="btn btn-danger ms-2"
+                  onClick={() => handleDelete(task)}
+                >
+                  Delete
+                </button>
               </td>
             </tr>
           ))}
