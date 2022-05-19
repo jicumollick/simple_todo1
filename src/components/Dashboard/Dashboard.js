@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
-
+import { toast } from "react-toastify";
+import "./Dashboard.css";
 const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
+  const [completed, setCompleted] = useState(false);
 
   useEffect(() => {
     fetch("http://localhost:5000/tasks")
@@ -20,9 +22,15 @@ const Dashboard = () => {
       body: JSON.stringify({ id }),
     })
       .then((res) => res.json())
-      .then((data) => console.log(data));
+      .then((data) => {
+        toast.success("deleted Successfully");
+        console.log(data);
+      });
   };
 
+  const handleComplete = (task) => {
+    toast.success("task completed successfully");
+  };
   return (
     <div>
       Number of tasks is {tasks.length}
@@ -37,12 +45,19 @@ const Dashboard = () => {
         </thead>
         <tbody>
           {tasks.map((task, index) => (
-            <tr key={task._id}>
+            <tr key={task._id} className={task.completed ? "myLine" : ""}>
               <th scope="row">{index + 1}</th>
               <td>{task.taskName}</td>
               <td>{task.taskDescription}</td>
               <td>
-                <button className="btn btn-success">Complete</button>
+                <button
+                  className="btn btn-success"
+                  onClick={() => {
+                    handleComplete(task);
+                  }}
+                >
+                  Complete
+                </button>
                 <button
                   className="btn btn-danger ms-2"
                   onClick={() => handleDelete(task)}
